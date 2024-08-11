@@ -25,7 +25,8 @@ Bootstrap with custom variables
   --gray-light: #969696;
   --primary: #3167eb;
   --secondary: #545454;
-  --success: #00b517;
+  --success: #a52a2a;
+  --bg-brown: #8B4512;
   --info: #17a2b8;
   --warning: #ff9017;
   --danger: #fa3434;
@@ -2386,7 +2387,7 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #3167eb;
+  background-color: #2B1700;
   border-color: #3167eb;
 }
 .btn-primary:hover {
@@ -2440,8 +2441,8 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #00b517;
-  border-color: #00b517;
+  background-color: #a52a2a;
+  border-color: #a52a2a;
 }
 .btn-success:hover {
   color: #fff;

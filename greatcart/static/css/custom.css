@@ -1,0 +1,80 @@
+/* Custom styles for btn-outline-danger */
+
+/* Default state */
+.btn-outline-danger {
+  color: #6f4e37; /* Chocolaty brown text */
+  border-color: #6f4e37; /* Chocolaty brown border */
+}
+
+/* Hover, Focus, and Active state */
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active,
+.btn-outline-danger.active,
+.btn-outline-danger.dropdown-toggle.show {
+  color: #fff; /* White text */
+  background-color: #6f4e37; /* Chocolaty brown background */
+  border-color: #6f4e37; /* Chocolaty brown border */
+}
+
+/* Focus and Active state outlines */
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 0.2rem rgba(111, 78, 55, 0.5); /* Chocolaty brown shadow */
+}
+
+/* General button styling for btn-danger */
+.btn-danger {
+  background-color: #6f4e37; /* Chocolaty brown background */
+  border-color: #6f4e37; /* Chocolaty brown border */
+  color: #ffffff; /* White text */
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #5a4328; /* Darker chocolaty brown for hover/active state */
+  border-color: #5a4328; /* Darker chocolaty brown border */
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  background-color: #fff; /* White background for dropdown menu */
+  border: 1px solid #6f4e37; /* Border color matching the button */
+}
+
+.dropdown-menu .dropdown-item {
+  color: #6f4e37; /* Chocolaty brown text color */
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f8f9fa; /* Light background on hover */
+  color: #6f4e37; /* Chocolaty brown text color on hover */
+}
+
+/* Ensure dropdown toggle button does not inherit unwanted styles */
+.btn-dropdown-toggle {
+  background-color: #6f4e37; /* Chocolaty brown background */
+  border-color: #6f4e37; /* Chocolaty brown border */
+  color: #fff; /* White text */
+}
+
+.btn-dropdown-toggle:hover,
+.btn-dropdown-toggle:focus {
+  background-color: #5a4328; /* Darker chocolaty brown on hover */
+  border-color: #5a4328; /* Darker border on hover */
+}
+
+/* Ensure dropdown menu items have correct colors */
+.dropdown-menu .dropdown-item {
+  background-color: #fff; /* White background */
+  color: #6f4e37; /* Chocolaty brown text color */
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background-color: #6f4e37; /* Chocolaty brown background on hover */
+  color: #fff; /* White text on hover */
+}
