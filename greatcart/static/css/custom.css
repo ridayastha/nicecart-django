@@ -1,80 +1,115 @@
-/* Custom styles for btn-outline-danger */
+/* Transition for smooth hover effects */
+.btn-outline-danger, .btn-danger, .btn-dropdown-toggle {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px; /* Slightly rounded corners */
+}
 
 /* Default state */
 .btn-outline-danger {
-  color: #6f4e37; /* Chocolaty brown text */
-  border-color: #6f4e37; /* Chocolaty brown border */
+  color: #004085; /* Dark blue text */
+  border-color: #004085 !important; /* Dark blue border */
 }
 
-/* Hover, Focus, and Active state */
+/* Hover, Focus, Active, and Visited state */
 .btn-outline-danger:hover,
 .btn-outline-danger:focus,
 .btn-outline-danger:active,
 .btn-outline-danger.active,
 .btn-outline-danger.dropdown-toggle.show {
-  color: #fff; /* White text */
-  background-color: #6f4e37; /* Chocolaty brown background */
-  border-color: #6f4e37; /* Chocolaty brown border */
+  color: #fff !important; /* White text */
+  background-color: #004085 !important; /* Dark blue background */
+  border-color: #004085 !important; /* Dark blue border */
 }
 
-/* Focus and Active state outlines */
+/* Focus and Active state with custom blue shadow */
 .btn-outline-danger:focus,
-.btn-outline-danger:active {
-  outline: none; /* Remove default outline */
-  box-shadow: 0 0 0 0.2rem rgba(111, 78, 55, 0.5); /* Chocolaty brown shadow */
+.btn-outline-danger:active,
+.btn-outline-danger.active,
+.btn-outline-danger.dropdown-toggle.show {
+  outline: none !important; /* Remove the default pink outline */
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important; /* Blue shadow */
+  border-color: #004085 !important; /* Ensure the border remains blue */
 }
 
 /* General button styling for btn-danger */
 .btn-danger {
-  background-color: #6f4e37; /* Chocolaty brown background */
-  border-color: #6f4e37; /* Chocolaty brown border */
-  color: #ffffff; /* White text */
+  background: linear-gradient(180deg, #004085, #003366) !important; /* Subtle gradient */
+  border-color: #003366 !important; /* Darker blue border */
+  color: #ffffff !important; /* White text */
 }
 
 .btn-danger:hover,
 .btn-danger:focus,
 .btn-danger:active,
+.btn-danger.active,
+.btn-danger:visited {
+  background-color: #002952 !important; /* Darker blue */
+  border-color: #002952 !important; /* Darker blue border */
+}
+
+/* Focus and Active state with custom blue shadow for btn-danger */
+.btn-danger:focus,
+.btn-danger:active,
 .btn-danger.active {
-  background-color: #5a4328; /* Darker chocolaty brown for hover/active state */
-  border-color: #5a4328; /* Darker chocolaty brown border */
+  outline: none !important; /* Remove the default pink outline */
+  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important; /* Blue shadow */
+  border-color: #003366 !important; /* Ensure the border remains consistent */
 }
 
-/* Dropdown menu styling */
-.dropdown-menu {
-  background-color: #fff; /* White background for dropdown menu */
-  border: 1px solid #6f4e37; /* Border color matching the button */
-}
-
-.dropdown-menu .dropdown-item {
-  color: #6f4e37; /* Chocolaty brown text color */
-}
-
-.dropdown-menu .dropdown-item:hover {
-  background-color: #f8f9fa; /* Light background on hover */
-  color: #6f4e37; /* Chocolaty brown text color on hover */
-}
-
-/* Ensure dropdown toggle button does not inherit unwanted styles */
+/* Dropdown toggle button styling */
 .btn-dropdown-toggle {
-  background-color: #6f4e37; /* Chocolaty brown background */
-  border-color: #6f4e37; /* Chocolaty brown border */
-  color: #fff; /* White text */
+  background: linear-gradient(180deg, #004085, #003366) !important; /* Subtle gradient */
+  border-color: #003366 !important;
+  color: #fff !important;
+  border-radius: 4px; /* Consistent with dropdown menu */
+  padding: 8px 16px; /* Comfortable padding */
 }
 
 .btn-dropdown-toggle:hover,
-.btn-dropdown-toggle:focus {
-  background-color: #5a4328; /* Darker chocolaty brown on hover */
-  border-color: #5a4328; /* Darker border on hover */
+.btn-dropdown-toggle:focus,
+.btn-dropdown-toggle:active,
+.btn-dropdown-toggle:visited {
+  background-color: #002952 !important; /* Darker blue on hover */
+  border-color: #002952 !important; /* Darker border on hover */
 }
 
-/* Ensure dropdown menu items have correct colors */
+/* Enhanced dropdown menu styling */
+.dropdown-menu {
+  background-color: #f0f4f8; /* Light blue-gray background */
+  border: 1px solid #004085; /* Dark blue border */
+  border-radius: 6px; /* Rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+  padding: 10px; /* Additional padding */
+}
+
+/* Dropdown menu item styling */
 .dropdown-menu .dropdown-item {
-  background-color: #fff; /* White background */
-  color: #6f4e37; /* Chocolaty brown text color */
+  color: #004085; /* Dark blue text color */
+  padding: 8px 16px; /* Consistent padding */
+  border-radius: 4px; /* Rounded corners for items */
+  margin: 2px 0; /* Space between items */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
 }
 
+/* Hover and focus state for dropdown items */
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item:focus {
-  background-color: #6f4e37; /* Chocolaty brown background on hover */
-  color: #fff; /* White text on hover */
+  background-color: #007bff; /* Bootstrap blue background on hover/focus */
+  color: #fff; /* White text on hover/focus */
+}
+
+/* Optional: Add icons or extra elements to dropdown items */
+.dropdown-menu .dropdown-item::before {
+  content: "•"; /* Custom bullet or icon */
+  color: #007bff; /* Blue color matching the theme */
+  margin-right: 8px; /* Space between icon and text */
+}
+
+/* Optional: Add a header to the dropdown menu */
+.dropdown-menu .dropdown-header {
+  font-size: 1rem; /* Larger font for header */
+  color: #004085; /* Dark blue text */
+  margin-bottom: 10px; /* Space below header */
+  border-bottom: 1px solid #004085; /* Divider line */
+  padding-bottom: 6px; /* Padding below header text */
 }
