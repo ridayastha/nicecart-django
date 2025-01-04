@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse  # Add this import
-from .forms import RegistrationForm
-from .models import Account
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
+from orders.models import Order, OrderProduct
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -30,7 +32,8 @@ def register(request):
                 last_name=last_name,
                 email=email,
                 username=username,
-                password=password
+                password=password,
+
             )
             user.phone_number = phone_number
             user.save()
@@ -49,7 +52,6 @@ def register(request):
             send_email.send()
             messages.success(request, 'Registration successful. Please check your email to activate your account.')
 
-            # Redirect to login with verification message
             return redirect(f"{reverse('login')}?command=verification&email={email}")
     else:
         form = RegistrationForm()
@@ -102,7 +104,6 @@ def login(request):
             url = request.META.get('HTTP_REFERER')
             try:
                 query = requests.utils.urlparse(url).query
-                #next=/cart/checkout/
                 params = dict(x.split('=') for x in query.split('&'))
                 if 'next' in params:
                     nextPage = params['next']
@@ -131,6 +132,11 @@ def activate(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
+
+        # Create UserProfile if it doesn't exist
+        if not UserProfile.objects.filter(user=user).exists():
+            UserProfile.objects.create(user=user)
+
         messages.success(request, 'Congratulations! Your account is activated.')
         return redirect('login')
     else:
@@ -139,7 +145,16 @@ def activate(request, uidb64, token):
 
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    orders = Order.objects.order_by('created_at').filter(user_id=request.user.id, is_ordered=True)
+    orders_count = orders.count()
+
+    userprofile = UserProfile.objects.filter(user=request.user).first()  # Use first() to handle missing profiles
+
+    context = {
+      'orders_count': orders_count,
+      'userprofile': userprofile,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 def forgotPassword(request):
     if request.method == 'POST':
@@ -199,3 +214,121 @@ def resetPassword(request):
             return redirect('resetPassword')
     else:
         return render(request, 'accounts/resetPassword.html')
+
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
+    context = {
+       'orders': orders,
+    }
+    return render(request, 'accounts/my_orders.html', context)
+
+# @login_required(login_url='login')
+# def edit_profile(request):
+#     userprofile = get_object_or_404(UserProfile, user=request.user)
+
+#     if request.method == 'POST':
+#         user_form = UserForm(request.POST, instance=request.user)
+#         profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+
+#         # Ensure both forms are valid before accessing cleaned_data
+#         if user_form.is_valid() and profile_form.is_valid():
+#             # Check if the profile picture should be cleared
+#             if profile_form.cleaned_data.get('clear_profile_picture'):
+#                 userprofile.profile_picture = None  # Clear profile picture
+#                 userprofile.save()
+
+#             # Save the forms
+#             user_form.save()
+#             profile_form.save()
+
+#             messages.success(request, 'Your profile has been updated.')
+#             return redirect('edit_profile')
+
+#     else:
+#         user_form = UserForm(instance=request.user)
+#         profile_form = UserProfileForm(instance=userprofile)
+
+#     context = {
+#         'user_form': user_form,
+#         'profile_form': profile_form,
+#         'userprofile': userprofile,
+#     }
+
+#     return render(request, 'accounts/edit_profile.html', context)
+
+@login_required(login_url='login')
+def edit_profile(request):
+    # Try to get the user's profile or create it if it doesn't exist
+    userprofile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+
+        # Ensure both forms are valid before accessing cleaned_data
+        if user_form.is_valid() and profile_form.is_valid():
+            # Check if the profile picture should be cleared
+            if profile_form.cleaned_data.get('clear_profile_picture'):
+                userprofile.profile_picture = None  # Clear profile picture
+                userprofile.save()
+
+            # Save the forms
+            user_form.save()
+            profile_form.save()
+
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('edit_profile')
+
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'userprofile': userprofile,
+    }
+
+    return render(request, 'accounts/edit_profile.html', context)
+
+
+
+@login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+
+        user = Account.objects.get(username__exact=request.user.username)
+
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password updated successfully.')
+                return redirect('change_password')
+            else:
+                messages.error(request, 'Please enter a valid current password')
+                return redirect('change_password')
+        else:
+            messages.error(request, 'Passwords do not match!')
+            return redirect('change_password')
+    return render(request, 'accounts/change_password.html')
+
+@login_required(login_url='login')
+def order_detail(request, order_id):
+    order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
+    subtotal = 0
+    for i in order_detail:
+        subtotal += i.product_price * i.quantity
+
+    context = {
+      'order_detail': order_detail,
+      'order': order,
+      'subtotal': subtotal,
+    }
+    return render(request, 'accounts/order_detail.html', context)
