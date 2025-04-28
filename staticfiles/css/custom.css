@@ -1,117 +1,10 @@
-/* Transition for smooth hover effects */
-.btn-outline-danger, .btn-danger, .btn-dropdown-toggle {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  border-radius: 4px; /* Slightly rounded corners */
-}
-
-/* Default state */
-.btn-outline-danger {
-  color: #004085; /* Dark blue text */
-  border-color: #004085 !important; /* Dark blue border */
-}
-
-/* Hover, Focus, Active, and Visited state */
-.btn-outline-danger:hover,
-.btn-outline-danger:focus,
-.btn-outline-danger:active,
-.btn-outline-danger.active,
-.btn-outline-danger.dropdown-toggle.show {
-  color: #fff !important; /* White text */
-  background-color: #004085 !important; /* Dark blue background */
-  border-color: #004085 !important; /* Dark blue border */
-}
-
-/* Focus and Active state with custom blue shadow */
-.btn-outline-danger:focus,
-.btn-outline-danger:active,
-.btn-outline-danger.active,
-.btn-outline-danger.dropdown-toggle.show {
-  outline: none !important; /* Remove the default pink outline */
-  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important; /* Blue shadow */
-  border-color: #004085 !important; /* Ensure the border remains blue */
-}
-
-/* General button styling for btn-danger */
-.btn-danger {
-  background: linear-gradient(180deg, #004085, #003366) !important; /* Subtle gradient */
-  border-color: #003366 !important; /* Darker blue border */
-  color: #ffffff !important; /* White text */
-}
-
-.btn-danger:hover,
-.btn-danger:focus,
-.btn-danger:active,
-.btn-danger.active,
-.btn-danger:visited {
-  background-color: #002952 !important; /* Darker blue */
-  border-color: #002952 !important; /* Darker blue border */
-}
-
-/* Focus and Active state with custom blue shadow for btn-danger */
-.btn-danger:focus,
-.btn-danger:active,
-.btn-danger.active {
-  outline: none !important; /* Remove the default pink outline */
-  box-shadow: 0 0 0 0.2rem rgba(0, 64, 133, 0.5) !important; /* Blue shadow */
-  border-color: #003366 !important; /* Ensure the border remains consistent */
-}
-
-/* DropDown */
-/* Dropdown toggle button styling */
-.btn-dropdown-toggle {
-  background: linear-gradient(180deg, #004085, #003366) !important;
-  border: 1px solid #003366 !important;
-  color: #fff !important;
-  border-radius: 4px;
-  padding: 8px 16px;
-}
-
-.btn-dropdown-toggle:hover,
-.btn-dropdown-toggle:focus {
-  background-color: #002952 !important;
-  border-color: #002952 !important;
-}
-
-/* Dropdown menu styling */
-.dropdown-menu {
-  background-color: #f0f4f8;
-  border: 1px solid #004085;
-  border-radius: 6px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  padding: 10px;
-}
-
-/* Dropdown menu item styling */
-.dropdown-item {
-  color: #004085;
-  padding: 8px 16px;
-  border-radius: 4px;
-  margin: 2px 0;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.dropdown-item:hover,
-.dropdown-item:focus {
-  background-color: #007bff;
-  color: #fff;
-}
-
-/* Dropdown header styling */
-.dropdown-header {
-  font-size: 1rem;
-  color: #004085;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #004085;
-  padding-bottom: 6px;
-}
-
-
+/* Hide Radio button */
 .rate > input{
   display: none;
 }
 
 .rate{
-  display: inline-block;
+  display: inline-block;;
   border: 0;
 }
 
@@ -119,17 +12,18 @@
   float: right;
 }
 
-/*Showing the stars */
+/* Showing the stars */
 .rate > label:before{
   display: inline-block;
   font-size: 1.1rem;
   font-family: FontAwesome;
   content: "\f005";
+  margin:0;
   padding:0.3rem .2rem;
   cursor: pointer;
 }
 
-/* half-star */
+/* Half star */
 .rate .half:before{
   content: "\f089";
   position: absolute;
@@ -141,29 +35,27 @@ input:checked ~ label, label:hover ~ label{
   color: #ffb503;
 }
 
-/* hover highlight */
-input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label, label:hover ~ input:checked ~label{
+/* hover hightlight */
+input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label{
   color: #cc9000;
 }
 
-/* rating star */
 .rating-star i{
   color: #ffb503 !important;
 }
 
 ul.thumb{
-  margin: 0 auto;
+  margin:0 auto;
   padding: 0;
   float: left;
 }
-
 ul.thumb li{
   list-style: none;
   margin: 10px;
 }
-
 ul.thumb li img{
   width: 80px;
   height: 80px;
-  border-radius: 1px solid grey;
+  border: 1px solid grey;
 }

@@ -101,15 +101,17 @@ def login(request):
 
             auth.login(request, user)
             messages.success(request, 'You are now logged in.')
-            url = request.META.get('HTTP_REFERER')
-            try:
-                query = requests.utils.urlparse(url).query
-                params = dict(x.split('=') for x in query.split('&'))
-                if 'next' in params:
-                    nextPage = params['next']
-                    return redirect(nextPage)
-            except:
-                return redirect('dashboard')
+            # url = request.META.get('HTTP_REFERER')
+            # try:
+            #     query = requests.utils.urlparse(url).query
+            #     params = dict(x.split('=') for x in query.split('&'))
+            #     if 'next' in params:
+            #         nextPage = params['next']
+            #         return redirect(nextPage)
+            # except:
+            #     return redirect('dashboard')
+            next_url = request.GET.get('next', '/')
+            return redirect(next_url)
         else:
             messages.error(request, 'Invalid login credentials')
             return redirect('login')

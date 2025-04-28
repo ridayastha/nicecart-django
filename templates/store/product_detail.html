@@ -17,7 +17,7 @@
 			</article>
 			<ul class="thumb">
 				<li>
-					<a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a>
+					<!-- <a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a> -->
 					{% for i in product_gallery %}
 					<a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
 					{% endfor %}
@@ -93,7 +93,7 @@
 
 		<form action="{% url 'submit_review' single_product.id %}" method="post">
     {% csrf_token %}
-    <h5>Write Your Review</h5>
+    <h5>Provide your review</h5>
     <div>
         <!-- Rating stars -->
         <label for="rating">How do you rate this product?</label>
@@ -121,7 +121,7 @@
             {% if orderproduct %}
                 <input type="submit" value="Submit Review" class="btn btn-primary">
             {% else %}
-                <p>You must purchase this product to post a review.</p>
+                <p>You must purchase this product to post a review !</p>
             {% endif %}
         {% else %}
             <p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
@@ -150,6 +150,8 @@
 			 <article class="box mb-3">
 					 <div class="icontext w-100">
 							 <img src="{% static './images/avatars/avatar1.jpg' %}" class="img-xs icon rounded-circle" alt="{{ review.user.username }}">
+							 <!-- <img src="{% if review.user.avatar %}{{ review.user.avatar.url }}{% else %}{% static 'images/avatars/default.jpg' %}{% endif %}" class="img-xs icon rounded-circle" alt="{{ review.user.username }}"> -->
+
 							 <div class="text">
 									 <span class="date text-muted float-md-right">{{ review.updated_at }}</span>
 									 <h6 class="mb-1">{{ review.user.full_name }}</h6>
