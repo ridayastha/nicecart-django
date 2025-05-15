@@ -120,6 +120,7 @@ def login(request):
 
 @login_required(login_url='login')
 def logout(request):
+    list(messages.get_messages(request))
     auth.logout(request)
     messages.success(request, 'You have been logged out.')
     return redirect('login')

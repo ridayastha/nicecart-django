@@ -1,60 +1,45 @@
-// some scripts
-
-// jquery ready start
 $(document).ready(function() {
-	// jQuery code
-
-
-    /* ///////////////////////////////////////
-
-    THESE FOLLOWING SCRIPTS ONLY FOR BASIC USAGE, 
-    For sliders, interactions and other
-
-    */ ///////////////////////////////////////
-    
-
-	//////////////////////// Prevent closing from click inside dropdown
+    // Prevent dropdown closing on clicking inside
     $(document).on('click', '.dropdown-menu', function (e) {
       e.stopPropagation();
     });
-
-
+  
+    // Radio button change toggle active class
     $('.js-check :radio').change(function () {
-        var check_attr_name = $(this).attr('name');
-        if ($(this).is(':checked')) {
-            $('input[name='+ check_attr_name +']').closest('.js-check').removeClass('active');
-            $(this).closest('.js-check').addClass('active');
-           // item.find('.radio').find('span').text('Add');
-
-        } else {
-            item.removeClass('active');
-            // item.find('.radio').find('span').text('Unselect');
-        }
+      var check_attr_name = $(this).attr('name');
+      if ($(this).is(':checked')) {
+        $('input[name='+ check_attr_name +']').closest('.js-check').removeClass('active');
+        $(this).closest('.js-check').addClass('active');
+      } else {
+        $(this).closest('.js-check').removeClass('active');
+      }
     });
-
-
+  
+    // Checkbox change toggle active class
     $('.js-check :checkbox').change(function () {
-        var check_attr_name = $(this).attr('name');
-        if ($(this).is(':checked')) {
-            $(this).closest('.js-check').addClass('active');
-           // item.find('.radio').find('span').text('Add');
-        } else {
-            $(this).closest('.js-check').removeClass('active');
-            // item.find('.radio').find('span').text('Unselect');
-        }
+      if ($(this).is(':checked')) {
+        $(this).closest('.js-check').addClass('active');
+      } else {
+        $(this).closest('.js-check').removeClass('active');
+      }
     });
-
-
-
-	//////////////////////// Bootstrap tooltip
-	if($('[data-toggle="tooltip"]').length>0) {  // check if element exists
-		$('[data-toggle="tooltip"]').tooltip()
-	} // end if
-
-
-
-
-    
-}); 
-// jquery end
-
+  
+    // Bootstrap tooltip init
+    if ($('[data-toggle="tooltip"]').length > 0) {
+      $('[data-toggle="tooltip"]').tooltip();
+    }
+  
+    // Message fade in and fade out (handle multiple messages)
+    $('.message').hide().fadeIn('fast');
+  
+    $('.message').each(function(index) {
+      const $msg = $(this);
+      setTimeout(function() {
+        $msg.fadeTo(500, 0.5).slideUp(500, function() {
+          $(this).remove();
+        });
+      }, 4000 + index * 300);  // stagger fadeout if multiple messages
+    });
+  
+  });
+  

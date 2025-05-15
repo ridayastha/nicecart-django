@@ -1,68 +1,52 @@
-{% load static%}
-<header class="section-header">
-<!-- <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-<div class="container">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTop4">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item dropdown">
-      <a href="#" class="nav-link">   English </a>
+{% load static %}
 
-    </li>
-    <li class="nav-item dropdown">
-      <a href="#" class="nav-link"> USD </a>
-    </li>
-    </ul>
-    <ul class="navbar-nav">
-    <li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
-    <li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
-  </ul>
-  </div>
-</div> 
-</nav> -->
+
+<div class="container-fluid" style="text-align:center;background-image: linear-gradient(to right, #47d335 , #7A7A7A);padding:10px;font-weight: 600;position:sticky;top:0;z-index:999;">
+  <a href="https://www.amazon.com/dp/YOUR_PRODUCT_ID" target="_blank" style="color: white; text-transform: uppercase; letter-spacing: 2px; text-decoration: none;">
+    <span>&#x1F525;</span> Buy Now on Amazon – Limited Time Offer <span>&#x1F525;</span>
+  </a>
+  
+</div> <!-- container //  -->
+
+<header class="section-header">
+
+
 
 <section class="header-main border-bottom">
   <div class="container">
 <div class="row align-items-center">
   <div class="col-lg-2 col-md-3 col-6">
     <a href="{% url 'home' %}" class="brand-wrap">
-      <!-- Nav Logo -->
-      <img class="logo" src="{% static 'images/subha.png' %}">
-    </a>
+      <img class="logo" src="{% static './images/logo2.png' %}">
+    </a> <!-- brand-wrap.// -->
   </div>
-
   <div class="col-lg col-sm col-md col-6 flex-grow-0">
     <div class="category-wrap dropdown d-inline-block float-right">
-        <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-bars"></i> All Category
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="{% url 'store' %}">All</a>
-            {% for category in links %}
-                <a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
-            {% endfor %}
-        </div>
-    </div>  
-</div>
-
-  <a href="{% url 'store' %}" class="btn btn-warning">Store</a>
+      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-bars"></i> All category
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'store' %}">All Products </a>
+        {% for category in links %}
+          <a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }} </a>
+        {% endfor %}
+      </div>
+    </div>  <!-- category-wrap.// -->
+  </div> <!-- col.// -->
+  <a href="{% url 'store' %}" class="btn btn-outline-success">Store</a>
   <div class="col-lg  col-md-6 col-sm-12 col">
-    <form action="{% url 'search' %}" class="search" method="GET">
+    <form action="{% url 'search' %}" class="search" method='GET'>
       <div class="input-group w-100">
-          <input type="text" class="form-control" style="width:60%;" placeholder="Search..." name="keyword" required>
+          <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword" required>
 
           <div class="input-group-append">
-            <button class="btn btn-dark" type="submit">
+            <button class="btn btn-success" type="submit">
               <i class="fa fa-search"></i>
             </button>
           </div>
         </div>
     </form> <!-- search-wrap .end// -->
   </div> <!-- col.// -->
-
-
   <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
         <div class="d-flex justify-content-end mb-3 mb-lg-0">
           {% if user.id is None %}
@@ -83,16 +67,16 @@
           </div>
           {% endif %}
           <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
-            <div class="icon icon-sm rounded-circle border">
-              <i class="fa fa-shopping-cart text-dark"></i>
-            </div>
+            <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
             <span class="badge badge-pill badge-danger notify">{{cart_count}}</span>
           </a>
-        </div>
-      </div>
-</div>
-  </div> 
-</section> 
+
+        </div> <!-- widgets-wrap.// -->
+
+      </div> <!-- col.// -->
+</div> <!-- row.// -->
+  </div> <!-- container.// -->
+</section> <!-- header-main .// -->
 
 
 

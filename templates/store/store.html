@@ -24,8 +24,8 @@
                     <article class="filter-group">
                         <header class="card-header">
                             <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
-                                <i class="icon-control fa fa-chevron-down"></i>
-                                <h6 class="title">Categories</h6>
+                                <i class="icon-control fa fa-chevron-down text-dark"></i>
+                                <h6 class="title text-dark">Categories</h6>
                             </a>
                         </header>
                         <div class="filter-content collapse show" id="collapse_1">
@@ -44,7 +44,7 @@
                 </div>
             </aside>
 
-            <main class="col-md-9">
+            <main class="col-md-9 mt-4">
                 <header class="border-bottom mb-4 pb-3">
                     <div class="form-inline">
                         <span class="mr-md-auto"><b>{{ product_count }}</b> items found</span>
@@ -66,7 +66,7 @@
                                         <span class="price">$ {{ product.price }}</span>
                                     </div>
                                 </div>
-                                <a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details</a>
+                                <a href="{{ product.get_url }}" class="btn btn-block btn-dark">View Details</a>
                             </figcaption>
                         </figure>
                     </div>
