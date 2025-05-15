@@ -118,76 +118,81 @@
 </section>
 
 <script>
-
-	function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof paypal !== "undefined") {
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
+      }
+      return cookieValue;
     }
-    return cookieValue;
-}
 
-	      var amount = "{{ grand_total }}"
-				var url = "{% url 'payments' %}"
-				var csrftoken = getCookie('csrftoken');
-				var orderID = "{{order.order_number}}"
-				var payment_method = 'PayPal'
-				var redirect_url = "{% url 'order_complete' %}"
-        paypal.Buttons({
-					style:{
-						color : 'blue',
-						shape : 'pill',
-						label : 'pay',
-						height : 40
-					},
+    var amount = "{{ grand_total }}";
+    var url = "{% url 'payments' %}";
+    var csrftoken = getCookie('csrftoken');
+    var orderID = "{{order.order_number}}";
+    var payment_method = 'PayPal';
+    var redirect_url = "{% url 'order_complete' %}";
 
-            // Call your server to set up the transaction
-            createOrder: function(data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: amount,  // Replace with dynamic value as needed
-                        }
-                    }]
-                });
-            },
+    paypal.Buttons({
+      style: {
+        color: 'blue',
+        shape: 'pill',
+        label: 'pay',
+        height: 40
+      },
 
-            // Call your server to finalize the transaction
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-									// show a success message to the buyer
-									  console.log(details);
-										sendData();
-                    function sendData(){
-											fetch(url, {
-												method : "POST",
-												headers: {
-													"Content-type": "application/json",
-													"X-CSRFToken": csrftoken,
-												},
-												body: JSON.stringify({
-													orderID: orderID,
-													trasnID: details.id,
-													payment_method: payment_method,
-													status: details.status,
-												}),
-											})
-										  .then((response) => response.json())
-										  .then((data)=> {
-												window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.trasnID;
-											});
-										}
-                });
-            },
-				}).render('#paypal-button-container');  // Use the id selector
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount,
+            }
+          }]
+        });
+      },
+
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          console.log(details);
+          sendData();
+
+          function sendData() {
+            fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+                "X-CSRFToken": csrftoken,
+              },
+              body: JSON.stringify({
+                orderID: orderID,
+                trasnID: details.id,
+                payment_method: payment_method,
+                status: details.status,
+              }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.trasnID;
+            });
+          }
+        });
+      },
+    }).render('#paypal-button-container');
+
+  } else {
+    console.error("PayPal SDK not loaded.");
+  }
+});
 </script>
+
 
 {% endblock %}
