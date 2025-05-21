@@ -6,7 +6,7 @@
 <div class="container">
 
 <div class="intro-banner-wrap">
-	<img src="{% static 'images/banners/banner.jpg' %}" class="img-fluid rounded shadow" style="transition: transform 0.4s ease;" 
+	<img src="{% static 'images/banners/Long.jpg' %}" class="img-fluid rounded shadow" style="transition: transform 0.4s ease;" 
 	onmouseover="this.style.transform='scale(1.05)'" 
 	onmouseout="this.style.transform='scale(1)'">
 </div>
@@ -20,8 +20,8 @@
 <div class="container">
 
 <header class="section-heading">
-	<a href="{% url 'store' %}" class="btn btn-outline-dark float-right rounded-pill">See all</a>
-	<h2 class="badge badge-warning text-light">Popular Products</h2>
+	<a href="{% url 'store' %}" class="btn btn-outline-dark btn-sm float-right">See all</a>
+	<h2 class="badge badge-dark">Popular Products</h2>
 
 </header><!-- sect-heading -->
 
@@ -32,9 +32,9 @@
 		<div class="card card-product-grid">
 			<a href="{{ product.get_url }}" class="img-wrap"> <img src="{{ product.images.url }}" class="mt-3"> </a>
 			<figcaption class="info-wrap">
-				<a href="{{ product.get_url }}" class="title mt-1">{{ product.product_name }}</a>
-				<div class="price mt-1">$ {{ product.price }} </div>
-				<div class="rating-star">
+				<a href="{{ product.get_url }}" class="title mt-1 text-center">{{ product.product_name }}</a>
+				<div class="price mt-1 text-center">$ {{ product.price }} </div>
+				<div class="rating-star mb-3 text-center">
 					<span>
 						<i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
 						<i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
@@ -43,6 +43,12 @@
 						<i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
 					</span>
 				</div>
+				<form action="{% url 'add_cart' product.id %}" method="POST">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-sm btn-outline-dark w-100">
+						<i class="fa fa-shopping-cart me-2"></i> Add to Cart
+					</button>
+				</form>
 			</figcaption>
 		</div>
 	</div> 

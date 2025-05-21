@@ -9,7 +9,7 @@
             <aside class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Billing Address</h4>
+                        <h4 class="card-title mb-4 text-center">Billing address</h4>
                         <!-- Corrected form tag with action URL -->
                         <form action="{% url 'place_order' %}" method="POST">
                             {% csrf_token %}
@@ -93,8 +93,8 @@
                                             </figcaption>
                                         </figure>
                                     </td>
-                                    <td>
-                                        <label for="">{{cart_item.quantity}}</label>
+                                    <td class="text-center">
+                                        <label for="" tex>{{cart_item.quantity}}</label>
                                     </td>
                                     <td>
                                         <div class="price-wrap">
@@ -106,7 +106,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
+                        <button type="submit" name="submit" class="btn btn-dark btn-block">Place Order</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                         </form> <!-- Move this form closing tag here -->
                     </div> <!-- card-body.// -->
