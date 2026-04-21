@@ -15,7 +15,7 @@ class MyAccountManager(BaseUserManager):
             username=username,
             first_name=first_name,
             last_name=last_name,
-            is_active=True  # Ensure user is active by default
+            is_active=False  # default to true
         )
 
         user.set_password(password)
@@ -48,7 +48,7 @@ class Account(AbstractBaseUser):
     last_login = models.DateTimeField(default=timezone.now)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)  # Default to True
+    is_active = models.BooleanField(default=False)  # Default to True
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'

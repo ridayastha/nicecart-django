@@ -3,6 +3,17 @@
 import os
 import sys
 
+# --- FIX FOR DJANGO 4.0+ AND ADMIN HONEYPOT ---
+try:
+    import django
+    from django.utils import translation
+    if not hasattr(translation, 'ugettext_lazy'):
+        translation.ugettext_lazy = translation.gettext_lazy
+    if not hasattr(translation, 'ugettext'):
+        translation.ugettext = translation.gettext
+except ImportError:
+    pass
+# --- END FIX ---
 
 def main():
     """Run administrative tasks."""

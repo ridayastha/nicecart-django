@@ -1,10 +1,17 @@
 {% autoescape off %}
-
 Hi {{ user.first_name }},
 
-YOUR ORDER HAS BEEN RECEIVED
+Thank you for your order! We’ve received your payment and are getting your items ready for shipment.
 
-Order Number: {{order.order_number}}
+---
+ORDER SUMMARY:
+Order Number: {{ order.order_number }}
+Transaction ID: {{ order.payment.payment_id }}
+Total Amount: ${{ order.order_total }}
+---
 
+You can view your order status at any time by logging into your account dashboard.
 
+Thank you for shopping with us!
+- The GreatKart Team
 {% endautoescape %}

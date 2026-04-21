@@ -1,15 +1,14 @@
 {% load static %}
 
-<div class="container-fluid text-center d-flex flex-wrap justify-content-center align-items-center gap-3 py-2"
-     style="background: linear-gradient(135deg, #e22d2d, #000000); font-weight: 500; position: sticky; top: 0; z-index: 999;">
+<div class="container-fluid text-center d-flex flex-wrap justify-content-center align-items-center gap-3 py-2 bg-dark">
   
-  <span class="text-white text-uppercase letter-spacing" style="letter-spacing: 1px;">
+  <span class="text-white text-uppercase letter-spacing small" style="letter-spacing: 1px;">
     Get 20% OFF on Your First Order!
   </span>
 
-  <a href="{% url 'store' %}" class="btn btn-outline-light fs-5 ml-4">
-    <i class="fas fa-store me-1"></i> Store
-  </a>
+{#  <a href="{% url 'store' %}" class="btn btn-outline-light fs-5 ml-4">#}
+{#    <i class="fas fa-store me-1"></i> Store#}
+{#  </a>#}
 </div>
 
 
@@ -23,7 +22,7 @@
 <div class="row align-items-center">
   <div class="col-lg-2 col-md-3 col-6">
     <a href="{% url 'home' %}" class="brand-wrap">
-      <img class="logo" src="{% static './images/carrot.png' %}">
+      <img class="logo" src="{% static './images/navlogo.png' %}">
     </a> <!-- brand-wrap.// -->
   </div>
   <div class="col-lg col-sm col-md col-6 flex-grow-2">
@@ -54,7 +53,7 @@
     </form> <!-- search-wrap .end// -->
   </div> <!-- col.// -->
   <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-        <div class="d-flex justify-content-end mb-3 mb-lg-0">
+        <div class="d-flex justify-content-end mt-2 mb-2 mb-lg-0">
           {% if user.id is None %}
           <div class="widget-header">
             <small class="title text-muted">Welcome guest!</small>
@@ -72,10 +71,15 @@
             </div>
           </div>
           {% endif %}
-          <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
+          <a href="{% url 'cart' %}" class="widget-header ml-3">
             <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart text-dark"></i></div>
             <span class="badge badge-pill badge-danger notify">{{cart_count}}</span>
           </a>
+
+
+        <a href="{% url 'store' %}" class="widget-header ml-3">
+            <div class="icon icon-sm rounded-circle border"><i class="fas fa-store  text-dark"></i> </div>
+        </a>
 
         </div> <!-- widgets-wrap.// -->
 

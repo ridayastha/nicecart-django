@@ -8,15 +8,18 @@ import json
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
+
+@login_required(login_url='login')
 def payments(request):
-    body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
 
-    #store transaction details inside Payment model
+    # Store transaction details
     payment = Payment(
         user = request.user,
-        payment_id = body['trasnID'],
+        payment_id = body['transID'],
         payment_method = body['payment_method'],
         amount_paid = order.order_total,
         status = body['status'],
@@ -25,9 +28,9 @@ def payments(request):
 
     order.payment = payment
     order.is_ordered = True
+    order.status='Accepted'
     order.save()
 
-    #move cart itmes to order product table
     cart_items = CartItem.objects.filter(user=request.user)
 
     for item in cart_items:
@@ -41,39 +44,39 @@ def payments(request):
         orderproduct.ordered = True
         orderproduct.save()
 
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all()
-        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+        # Handle Variations Many to Many
+        product_variation = item.variations.all()
         orderproduct.variations.set(product_variation)
         orderproduct.save()
 
-
-    # reduce the quantity of sold products
+        # Stock Management
         product = Product.objects.get(id=item.product.id)
         product.stock -= item.quantity
         product.save()
 
-    # clear the cart
     CartItem.objects.filter(user=request.user).delete()
 
-    #send order recieved email to customer
-    mail_subject = 'Thank you for your order!'
-    message = render_to_string('orders/order_received_email.html', {
-        'user': request.user,
-        'order': order,
-    })
-    to_email = request.user.email
-    send_email = EmailMessage(mail_subject, message, to=[to_email])
-    send_email.send()
+    # Send confirmation email
+    try:
+        mail_subject = 'Thank you for your order!'
+        message = render_to_string('orders/order_received_email.html', {
+            'user': request.user,
+            'order': order,
+        })
+        to_email = order.email
+        send_email = EmailMessage(mail_subject, message, to=[to_email])
+        send_email.send()
+    except Exception:
+        pass
 
-    #send order number and transaction id back to sendData method via JsonResponse
+    # Send response back to frontend
     data = {
          'order_number': order.order_number,
-         'trasnID' : payment.payment_id,
+         'transID' : payment.payment_id,
     }
-
     return JsonResponse(data)
 
+@login_required(login_url='login')
 def place_order(request, total=0, quantity=0):
     current_user = request.user
 
@@ -94,35 +97,36 @@ def place_order(request, total=0, quantity=0):
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
-            # Create and save the order
-            order = Order(
-                user=current_user,
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
-                phone=form.cleaned_data['phone'],
-                email=form.cleaned_data['email'],
-                address_line_1=form.cleaned_data['address_line_1'],
-                address_line_2=form.cleaned_data['address_line_2'],
-                country=form.cleaned_data['country'],
-                state=form.cleaned_data['state'],
-                city=form.cleaned_data['city'],
-                order_note=form.cleaned_data['order_note'],
-                order_total=grand_total,
-                tax=tax,
-                ip=request.META.get('REMOTE_ADDR'),
-                is_ordered=False  # Ensure this is set to False if you need it to be False
-            )
-            order.save()
+            # Create Order Instance
+            data = Order()  # Creating instance from model
+            data.user = current_user
+            data.first_name = form.cleaned_data['first_name']
+            data.last_name = form.cleaned_data['last_name']
+            data.phone = form.cleaned_data['phone']
+            data.email = form.cleaned_data['email']
+            data.address_line_1 = form.cleaned_data['address_line_1']
+            data.address_line_2 = form.cleaned_data['address_line_2']
+            data.country = form.cleaned_data['country']
+            data.state = form.cleaned_data['state']
+            data.city = form.cleaned_data['city']
+            data.order_note = form.cleaned_data['order_note']
+            data.order_total = grand_total
+            data.tax = tax
+            data.ip = request.META.get('REMOTE_ADDR')
+            data.save()
 
             # Generate and set the order number
+            yr = int(datetime.date.today().strftime('%Y'))
+            dt = int(datetime.date.today().strftime('%d'))
+            mt = int(datetime.date.today().strftime('%m'))
+            d = datetime.date(yr, mt, dt)
             current_date = datetime.date.today().strftime("%Y%m%d")
-            order_number = f"{current_date}{order.id}"
-            order.order_number = order_number
-            order.save()
+            order_number = f"{current_date}{data.id}"
+            data.order_number = order_number
+            data.save()
 
             # Retrieve the saved order using the order number
-            order = Order.objects.get(order_number=order_number)
-
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
                 'cart_items': cart_items,
@@ -131,8 +135,8 @@ def place_order(request, total=0, quantity=0):
                 'grand_total': grand_total,
             }
             return render(request, 'orders/payments.html', context)
-        else:
-            return redirect('checkout')
+
+        return redirect('checkout')
 
 def order_complete(request):
     order_number = request.GET.get('order_number')
