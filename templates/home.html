@@ -28,10 +28,15 @@
     }
 
     .telemetry-label {
-        font-size: 0.65rem;
-        letter-spacing: 2px;
+        {#font-size: 0.65rem;#}
+        {#letter-spacing: 2px;#}
         {#font-family: 'Courier New', Courier, monospace;#}
     }
+    .img-wrap img {
+    width: 100%;
+    height: 200px; /* Fixed height */
+    object-fit: contain; /* Keeps image proportions without cropping */
+}
 
     .section-spacer { padding: 20px 0; }
 </style>
@@ -47,28 +52,13 @@
         </div>
     </section>
 
-    <section class="section-spacer">
-        <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-dark">
-            <div>
-                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block">System.Query // Random_Selection</small>
-                <h3 class="text-uppercase font-weight-bold m-0 h4">Explore</h3>
-            </div>
-            <a href="{% url 'store' %}" class="btn btn-outline-dark btn-sm px-3 rounded font-weight-bold text-uppercase shadow-sm" style="font-size: 0.7rem;">See all</a>
-        </header>
-        <div class="row">
-            {% for product in random_products %}
-                {% include 'includes/product_card.html' %}
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section-spacer">
+<section class="section-spacer">
         <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-danger">
             <div>
-                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block">System.Status // New_Arrivals_Detected</small>
-                <h3 class="text-uppercase font-weight-bold m-0 h4">Just Dropped</h3>
+                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block"># Stay ahead of the trend</small>
+                <h3 class="text-uppercase font-weight-bold m-0 h6">New Arrivals</h3>
             </div>
-            <a href="{% url 'store' %}" class="btn btn-outline-dark btn-sm px-3 rounded font-weight-bold text-uppercase shadow-sm" style="font-size: 0.7rem;">See all</a>
+            <a href="{% url 'store' %}" class="btn btn-light btn-sm px-3 rounded font-weight-bold text-uppercase" style="font-size: 0.7rem;">See all</a>
         </header>
         <div class="row">
             {% for product in latest_products %}
@@ -77,13 +67,28 @@
         </div>
     </section>
 
-    <section class="section-spacer">
+<section class="section-spacer">
+        <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-success">
+            <div>
+                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block"># Hot Picks for You</small>
+                <h3 class="text-uppercase font-weight-bold m-0 h6">Recommended</h3>
+            </div>
+            <a href="{% url 'store' %}" class="btn btn-light btn-sm px-3 rounded font-weight-bold text-uppercase" style="font-size: 0.7rem;">See all</a>
+        </header>
+        <div class="row">
+            {% for product in recommended %}
+                {% include 'includes/product_card.html' %}
+            {% endfor %}
+        </div>
+    </section>
+
+<section class="section-spacer">
         <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-warning">
             <div>
-                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block">System.Metric // User_Rating_Peak</small>
-                <h3 class="text-uppercase font-weight-bold m-0 h4">Top Rated</h3>
+                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block"># Most Loved Products</small>
+                <h3 class="text-uppercase font-weight-bold m-0 h6">Top Rated</h3>
             </div>
-            <a href="{% url 'store' %}" class="btn btn-outline-dark btn-sm px-3 rounded font-weight-bold text-uppercase shadow-sm" style="font-size: 0.7rem;">See all</a>
+            <a href="{% url 'store' %}" class="btn btn-light btn-sm px-3 rounded font-weight-bold text-uppercase" style="font-size: 0.7rem;">See all</a>
         </header>
         <div class="row">
             {% for product in highest_rated %}
@@ -93,19 +98,25 @@
     </section>
 
     <section class="section-spacer mb-5">
-        <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-success">
+        <header class="d-flex justify-content-between align-items-center mb-4 telemetry-header border-dark">
             <div>
-                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block">System.Algo // Recommended_Matches</small>
-                <h3 class="text-uppercase font-weight-bold m-0 h4">Recommended</h3>
+                <small class="text-uppercase text-muted font-weight-bold telemetry-label d-block"># Fresh picks every time</small>
+                <h3 class="text-uppercase font-weight-bold m-0 h6">Explore</h3>
             </div>
-            <a href="{% url 'store' %}" class="btn btn-outline-dark btn-sm px-3 rounded font-weight-bold text-uppercase shadow-sm" style="font-size: 0.7rem;">See all</a>
+            <a href="{% url 'store' %}" class="btn btn-light btn-sm px-3 rounded font-weight-bold text-uppercase" style="font-size: 0.7rem;">See all</a>
         </header>
         <div class="row">
-            {% for product in recommended %}
+            {% for product in random_products %}
                 {% include 'includes/product_card.html' %}
             {% endfor %}
         </div>
     </section>
+
+
+
+
+
+
 
 </div>
 {% endblock %}

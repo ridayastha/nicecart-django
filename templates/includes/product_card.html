@@ -1,7 +1,23 @@
-<div class="col-md-3">
-    <div class="card card-product-grid rounded-lg">
-        <a href="{{ product.get_url }}" class="img-wrap">
-            <img src="{{ product.images.url }}" class="mt-3 rounded-lg">
+<style>
+    /* Update your base image style */
+.img-wrap {
+    overflow: hidden; /* Important: keeps the zoom inside the box */
+}
+
+.img-wrap img {
+    transition: transform 0.5s ease; /* Smooth zoom out */
+}
+
+/* The Hover Effect */
+.card-product-grid:hover .img-wrap img {
+    transform: scale(1.1); /* Zooms the product photo */
+}
+</style>
+
+<div class="col-md-3 col-sm-6">
+    <div class="card card-product-grid rounded-0 shadow-none">
+        <a href="{{ product.get_url }}" class="img-wrap p-2">
+            <img src="{{ product.images.url }}" class="mt-3">
         </a>
 
         <div class="info-wrap p-3">
@@ -11,12 +27,21 @@
 
             <div class="price mt-1 text-center"><strong>$ {{ product.price }}</strong></div>
 
+            <div class="mt-1 text-center text-warning">
+                <span>
+                    <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                </span>
+            </div>
             {% if product.stock <= 0 %}
-                <button class="btn btn-sm btn-danger w-100 p-3 mt-2 rounded-0" disabled>
+                <button class="btn btn-sm btn-danger w-100 p-2 mt-2 rounded-0" disabled>
                     <i class="fa fa-times-circle"></i> Out of Stock
                 </button>
             {% else %}
-                <a href="{{ product.get_url }}" class="btn btn-sm btn-outline-dark w-100 p-3 mt-2 rounded-0">
+                <a href="{{ product.get_url }}" class="btn btn-sm btn-outline-dark w-100 p-2 mt-2 rounded-0">
                     <i class="fa fa-shopping-cart me-1"></i> Add to Cart
                 </a>
             {% endif %}

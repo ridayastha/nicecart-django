@@ -1,104 +1,150 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
 
-<!-- ========================= SECTION PAGETOP ========================= -->
+{% block content %}
+<style>
+    /* Sidebar Link Base State */
+    .list-menu li a {
+        display: block;
+        padding: 10px 12px;
+        color: #666;
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+        border-left: 4px solid transparent;
+    }
+
+    /* Hover State */
+    .list-menu li a:hover {
+        color: #007bff !important;
+        background-color: #f8f9fa;
+        padding-left: 15px;
+    }
+
+    /* Active Highlight - Border Re-enabled */
+    .list-menu li a.active-filter {
+        color: #212529 !important;
+        font-weight: 700 !important;
+        background-color: #f1f3f5;
+        {#border-left: 4px solid #212529;#}
+        padding-left: 15px;
+    }
+</style>
+
 <section class="section-pagetop bg">
     <div class="container">
-        {% if 'search' in request.path %}
-        <h2 class="title-page">Search Result</h2>
-        {% else %}
-        <h2 class="title-page">Our Store</h2>
-        {% endif %}
+        <h2 class="title-page">{% if 'search' in request.path %}Search Result{% else %}Our Store{% endif %}</h2>
     </div>
 </section>
-<!-- ========================= SECTION INTRO END// ========================= -->
 
-<!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-content padding-y">
     <div class="container">
-        
         <div class="row">
             <aside class="col-md-3">
                 <div class="card">
                     <article class="filter-group">
                         <header class="card-header">
-                            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
-                                <i class="icon-control fa fa-chevron-down text-dark"></i>
-                                <h6 class="title text-dark">Categories</h6>
+                            <a href="#" data-toggle="collapse" data-target="#collapse_1">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Categories</h6>
                             </a>
                         </header>
                         <div class="filter-content collapse show" id="collapse_1">
                             <div class="card-body">
                                 <ul class="list-menu">
-                                    <li><a href="{% url 'store' %}">All Products</a></li>
+                                    <li>
+                                        <a href="{% url 'store' %}?{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}"
+                                           class="{% if not request.resolver_match.kwargs.category_slug and 'search' not in request.path %}active-filter{% endif %}">
+                                            All Products
+                                        </a>
+                                    </li>
                                     {% for category in links %}
-                                    <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
+                                    <li class="mt-2">
+                                        <a href="{{ category.get_url }}?{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}"
+                                           class="{% if request.resolver_match.kwargs.category_slug == category.slug %}active-filter{% endif %}">
+                                            {{ category.category_name }}
+                                        </a>
+                                    </li>
                                     {% endfor %}
                                 </ul>
                             </div>
                         </div>
                     </article>
 
-                    <!-- Additional filter groups... -->
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_3">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Price Range</h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_3">
+                            <div class="card-body">
+                                <form action="{% if categories %}{{ categories.get_url }}{% else %}{% url 'store' %}{% endif %}" method="GET">
+                                    {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Min</label>
+                                            <input type="number" name="min_price" class="form-control" placeholder="$0" value="{{ request.GET.min_price }}">
+                                        </div>
+                                        <div class="form-group text-right col-md-6">
+                                            <label>Max</label>
+                                            <input type="number" name="max_price" class="form-control" placeholder="$1000" value="{{ request.GET.max_price }}">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-block btn-dark">Apply</button>
+                                    {% if request.GET.min_price or request.GET.max_price %}
+                                        <a href="{% if categories %}{{ categories.get_url }}{% else %}{% url 'store' %}{% endif %}" class="btn btn-block btn-light mt-2">Reset Price</a>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </aside>
 
             <main class="col-md-9 mt-4">
                 <header class="border-bottom mb-4 pb-3">
                     <div class="form-inline">
-                        <span class="mr-md-auto"><b>{{ product_count }}</b> items found</span>
+                        <span class="mr-md-auto mr-2"><b>{{ product_count }}</b> items found</span>
+                        <select class="form-control mr-2" onchange="location = this.value;">
+                            <option value="?sort=latest{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}" {% if request.GET.sort == 'latest' %}selected{% endif %}>Latest</option>
+                            <option value="?sort=price_low{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="?sort=price_high{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                        </select>
                     </div>
                 </header>
 
                 <div class="row">
                     {% if products %}
-                    {% for product in products %}
-                    <div class="col-md-4">
-                        <figure class="card card-product-grid">
-                            <div class="img-wrap">
-                                <a href="{{ product.get_url }}"><img src="{{ product.images.url }}" alt="{{ product.product_name }}"></a>
-                            </div>
-                            <figcaption class="info-wrap">
-                                <div class="fix-height">
-                                    <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-                                    <div class="price-wrap mt-2">
-                                        <span class="price">$ {{ product.price }}</span>
-                                    </div>
-                                </div>
-                                <a href="{{ product.get_url }}" class="btn btn-block btn-dark">View Details</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    {% endfor %}
+                        {% for product in products %}
+                            {% include 'includes/product_card.html' %}
+                        {% endfor %}
                     {% else %}
-                    <div>
-                      <h4>No result found.</h4>
-                    </div>
+                        <div class="container text-center mt-5">
+                            <h4>No result found.</h4>
+                        </div>
                     {% endif %}
                 </div>
 
-                <nav class="mt-4" aria-label="Page navigation sample">
+                <nav class="mt-4" aria-label="Page navigation">
                     {% if products.has_other_pages %}
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center">
                         {% if products.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>
-                        {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ products.previous_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">&laquo;</a>
+                        </li>
                         {% endif %}
 
                         {% for i in products.paginator.page_range %}
-                        {% if products.number == i %}
-                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
-                        {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                        {% endif %}
+                            <li class="page-item {% if products.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ i }}</a>
+                            </li>
                         {% endfor %}
 
                         {% if products.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>
-                        {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ products.next_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">&raquo;</a>
+                        </li>
                         {% endif %}
                     </ul>
                     {% endif %}
@@ -107,6 +153,4 @@
         </div>
     </div>
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
-
 {% endblock %}
